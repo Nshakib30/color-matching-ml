@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FZL Color Matching AI — Dye Recipe Predictor</title>
+  <meta name="description" content="AI-powered dye recipe predictor for polyester tape and thread. Enter any color code or Lab values to get precise dye concentrations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ── Background orbs ─────────────────────────────────────── -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- ── Header ──────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="url(#g1)" stroke-width="2"/>
+          <circle cx="14" cy="17" r="6" fill="#ff6b9d" opacity="0.85"/>
+          <circle cx="26" cy="17" r="6" fill="#ffd93d" opacity="0.85"/>
+          <circle cx="20" cy="26" r="6" fill="#6bcbff" opacity="0.85"/>
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="40" y2="40">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#38bdf8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">FZL ColorMatch <span class="ai-badge">AI</span></div>
+        <div class="logo-sub">Dye Recipe Intelligence System</div>
+      </div>
+    </div>
+    <div class="header-stats" id="headerStats">
+      <div class="stat-chip" id="tapeCount"><span class="dot tape"></span>Loading...</div>
+      <div class="stat-chip" id="threadCount"><span class="dot thread"></span>Loading...</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── Main ────────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- Search Panel -->
+  <section class="search-panel glass-card">
+    <div class="panel-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Color Recipe Lookup
+    </div>
+
+    <!-- Substrate Toggle -->
+    <div class="substrate-toggle">
+      <button class="toggle-btn active" data-substrate="tape" id="btnTape">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        Polyester Tape
+      </button>
+      <button class="toggle-btn" data-substrate="thread" id="btnThread">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6l9 6 9-6M3 18l9-6 9 6"/></svg>
+        Polyester Thread
+      </button>
+    </div>
+
+    <!-- Search Input -->
+    <div class="search-group">
+      <label class="input-label">Color Name / Code</label>
+      <div class="search-input-wrap">
+        <input
+          type="text"
+          id="colorInput"
+          class="search-input"
+          placeholder="e.g. E001, E045, 104, 107..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <div class="suggestions-box" id="suggestions"></div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="or-divider"><span>or enter L*a*b* values</span></div>
+
+    <!-- Lab Inputs -->
+    <div class="lab-group">
+      <div class="lab-field">
+        <label>L* <span class="lab-hint">0–100</span></label>
+        <input type="number" id="labL" placeholder="45.2" step="0.1" min="0" max="100" class="lab-input" />
+      </div>
+      <div class="lab-field">
+        <label>a* <span class="lab-hint">-128 to 127</span></label>
+        <input type="number" id="labA" placeholder="12.1" step="0.1" min="-128" max="127" class="lab-input" />
+      </div>
+      <div class="lab-field">
+        <label>b* <span class="lab-hint">-128 to 127</span></label>
+        <input type="number" id="labB" placeholder="-8.3" step="0.1" min="-128" max="127" class="lab-input" />
+      </div>
+    </div>
+
+    <!-- Options Row -->
+    <div class="options-row">
+      <div class="option-group">
+        <label class="input-label">ML Model</label>
+        <select id="modelSelect" class="select-input">
+          <option value="xgboost">XGBoost (Recommended)</option>
+          <option value="lightgbm">LightGBM (Fastest)</option>
+          <option value="gradient_boosting">Gradient Boosting (Most Accurate)</option>
+          <option value="random_forest">Random Forest</option>
+          <option value="mlp">Neural Network (MLP)</option>
+        </select>
+      </div>
+      <div class="option-group">
+        <label class="input-label">Top Recipes</label>
+        <select id="topN" class="select-input">
+          <option value="1">Top 1</option>
+          <option value="3" selected>Top 3</option>
+          <option value="5">Top 5</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button class="predict-btn" id="predictBtn" onclick="runPrediction()">
+      <span class="btn-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </span>
+      <span class="btn-text">Predict Recipe</span>
+      <div class="btn-shimmer"></div>
+    </button>
+  </section>
+
+  <!-- Results Panel -->
+  <section class="results-panel" id="resultsPanel" style="display:none">
+
+    <!-- Target Color Display -->
+    <div class="target-color-card glass-card" id="targetCard">
+      <div class="target-swatch-wrap">
+        <div class="target-swatch" id="targetSwatch"></div>
+        <div class="target-info">
+          <div class="target-name" id="targetName">—</div>
+          <div class="target-lab" id="targetLab">—</div>
+          <div class="target-substrate" id="targetSubstrate">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipe Cards -->
+    <div class="recipes-grid" id="recipesGrid"></div>
+
+  </section>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay" style="display:none">
+    <div class="loading-card glass-card">
+      <div class="spinner-ring"></div>
+      <div class="loading-title">Searching Recipes...</div>
+      <div class="loading-sub" id="loadingMsg">Running K-M combinatorial search across 816 dye combinations</div>
+      <div class="loading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Toast -->
+  <div class="toast" id="toast"></div>
+
+</main>
+
+<!-- ── Footer ───────────────────────────────────────────────── -->
+<footer class="footer">
+  <div>FZL ColorMatch AI &mdash; Powered by Kubelka-Munk Physics + XGBoost / LightGBM / Random Forest</div>
+  <div class="footer-links">
+    <a href="https://github.com/Nshakib30/color-matching-ml" target="_blank">GitHub</a>
+    <span>&bull;</span>
+    <span>Polyester Tape &amp; Thread</span>
+  </div>
+</footer>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
