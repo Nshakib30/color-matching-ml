@@ -82,13 +82,13 @@ C:\ColorMatchingML\
 
 | File | Purpose |
 |---|---|
-| `FZL TAPE DYES Calibration.qtx` | K/S calibration curves for tape dyes |
-| `FZL THREAD DYES Calibration.qtx` | K/S calibration curves for thread dyes |
-| `FZL Tape COLOR BOOK.qtx` | Measured spectra of tape color standards |
-| `FZL Thread color book 1+2.qtx` | Measured spectra of thread color standards |
+| `TAPE DYES Calibration.qtx` | K/S calibration curves for tape dyes |
+| `THREAD DYES Calibration.qtx` | K/S calibration curves for thread dyes |
+| `Tape COLOR BOOK.qtx` | Measured spectra of tape color standards |
+| `Thread color book 1+2.qtx` | Measured spectra of thread color standards |
 | `tape_recipes_final.csv` | 600 tape recipes with dye concentrations |
 | `thread_recipes_final.csv` | 1112 thread recipes with dye concentrations |
-| `FZL STD COLOR.qtx` | Reference standard colors |
+| `STD COLOR.qtx` | Reference standard colors |
 
 ---
 
@@ -161,4 +161,4 @@ scipy.optimize per combo       MLP Neural Net
 
 ---
 
-*FZL ColorMission — ML Color Matching System*
+*ColorMission — ML Color Matching System*
