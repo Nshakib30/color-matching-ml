@@ -1,4 +1,4 @@
-# 🎨 FZL Color Matching ML System
+# 🎨 Color Matching ML System
 ### Polyester Tape & Thread — Disperse Dye Recipe Predictor
 
 ---
